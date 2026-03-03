@@ -23,4 +23,4 @@
 
 ## 💻 Python 實作工具建議
 繼續使用 **Pygame Zero**，但加入 `List` (列表) 的概念。
-請參考同資料夾下的 `demo_grid_map.py`。
+請依序參考同資料夾下的 **README.md** 與各 `demo_01_xxx.py`～`demo_05_xxx.py`。
