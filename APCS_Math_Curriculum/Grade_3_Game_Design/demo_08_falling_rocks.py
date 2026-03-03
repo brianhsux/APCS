@@ -7,11 +7,13 @@ import random
 WIDTH = 400
 HEIGHT = 600
 
-player_x = 200
-player_y = 550
-# Rock
-rock_x = random.randint(20, 380)
-rock_y = -50
+# Theme: Chick dodging Rain Drops
+chick = Actor('chick')
+chick.pos = (200, 550)
+
+drop = Actor('drop')
+drop.pos = (random.randint(20, 380), -50)
+
 score = 0
 game_over = False
 
@@ -22,28 +24,28 @@ def draw():
         screen.draw.text(f"Final Score: {score}", (120, 320), fontsize=40, color="white")
         return
 
-    screen.draw.filled_circle((player_x, player_y), 20, "lime")
-    screen.draw.filled_circle((rock_x, rock_y), 25, "gray")
+    chick.draw()
+    drop.draw()
     screen.draw.text(f"Score: {score}", (10, 10), fontsize=30, color="white")
 
 def update():
-    global player_x, rock_x, rock_y, score, game_over
+    global score, game_over
     
     if game_over: return
 
     # Player Movement
-    if keyboard.left: player_x -= 5
-    if keyboard.right: player_x += 5
+    if keyboard.left: chick.x -= 5
+    if keyboard.right: chick.x += 5
     
-    # Rock Falling (y increases)
-    rock_y += 5
+    # Drop Falling (y increases)
+    drop.y += 5
     
-    # Reset Rock
-    if rock_y > HEIGHT:
-        rock_y = -50
-        rock_x = random.randint(20, 380) # Random X
+    # Reset Drop
+    if drop.y > HEIGHT:
+        drop.y = -50
+        drop.x = random.randint(20, 380) # Random X
         score += 1
         
     # Collision Check
-    if abs(player_x - rock_x) < 40 and abs(player_y - rock_y) < 40:
+    if chick.colliderect(drop):
         game_over = True

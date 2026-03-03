@@ -5,34 +5,33 @@
 WIDTH = 600
 HEIGHT = 400
 
-# Player position (px, py)
-px = 100
-py = 200
+# Theme: Cat Walk
+# Player: Cat
+player = Actor('cat')
+player.pos = (100, 200)
 SPEED = 4
 
 def draw():
     screen.fill("midnightblue")
-    # Draw player (Circle)
-    screen.draw.filled_circle((px, py), 15, "gold")
-    screen.draw.circle((px, py), 15, "white")
+    
+    player.draw()
     
     # Display coordinates
     # 顯示座標：讓學生看到數字和位置的關係
-    screen.draw.text(f"Position: (x={px}, y={py})", (20, 20), fontsize=24, color="white")
-    screen.draw.text("Use Arrow Keys to Move", (20, 50), fontsize=18, color="lightgray")
+    screen.draw.text(f"Position: (x={int(player.x)}, y={int(player.y)})", (20, 20), fontsize=24, color="white")
+    screen.draw.text("Use Arrow Keys to Move the Cat", (20, 50), fontsize=18, color="lightgray")
 
 def update():
-    global px, py
     if keyboard.right:
-        px = px + SPEED
+        player.x += SPEED
     if keyboard.left:
-        px = px - SPEED
+        player.x -= SPEED
     if keyboard.down:
-        py = py + SPEED
+        player.y += SPEED
     if keyboard.up:
-        py = py - SPEED
+        player.y -= SPEED
     
     # Prevent going out of screen (Optional: Boundary Check)
     # 簡單的邊界檢查
-    px = max(15, min(WIDTH - 15, px))
-    py = max(15, min(HEIGHT - 15, py))
+    player.x = max(20, min(WIDTH - 20, player.x))
+    player.y = max(20, min(HEIGHT - 20, player.y))

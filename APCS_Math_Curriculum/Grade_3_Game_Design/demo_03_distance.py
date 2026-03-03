@@ -5,10 +5,13 @@
 WIDTH = 600
 HEIGHT = 400
 
-# Player
-px, py = 80, 80
-# Treasure position
-treasure_x, treasure_y = 500, 320
+# Theme: Dog finding Bone
+dog = Actor('dog')
+dog.pos = (80, 80)
+
+bone = Actor('bone')
+bone.pos = (500, 320)
+
 SPEED = 5
 
 def distance_manhattan(x1, y1, x2, y2):
@@ -16,33 +19,29 @@ def distance_manhattan(x1, y1, x2, y2):
     return abs(x1 - x2) + abs(y1 - y2)
 
 def draw():
-    screen.fill("darkgreen")
+    screen.fill("forestgreen")
     
-    # Treasure (Square)
-    screen.draw.filled_rect(Rect(treasure_x - 20, treasure_y - 15, 40, 30), "sienna")
-    screen.draw.rect(Rect(treasure_x - 20, treasure_y - 15, 40, 30), "gold")
-    screen.draw.text("?", (treasure_x - 8, treasure_y - 12), fontsize=24, color="gold")
+    bone.draw()
+    dog.draw()
     
-    # Player (Circle)
-    screen.draw.filled_circle((px, py), 12, "red")
-    screen.draw.text("Me", (px - 8, py - 8), fontsize=14, color="white")
+    screen.draw.text("Help the Dog find the Bone!", (20, 370), color="white")
     
     # Display Distance
-    d = distance_manhattan(px, py, treasure_x, treasure_y)
-    screen.draw.text(f"Distance to Treasure: {d}", (20, 20), fontsize=22, color="white")
+    d = distance_manhattan(dog.x, dog.y, bone.x, bone.y)
+    screen.draw.text(f"Distance: {int(d)}", (20, 20), fontsize=28, color="white")
     
-    if d < 40:
-        screen.draw.text("Close enough! Touch to win!", (20, 50), fontsize=18, color="yellow")
+    if d < 50:
+        screen.draw.text("Woof! So close!", (20, 50), fontsize=24, color="yellow")
     
     # Win Condition
     if d < 35:
-        screen.draw.text("YOU WIN!", (WIDTH//2 - 80, HEIGHT//2 - 20), fontsize=48, color="gold")
+        screen.draw.text("YUMMY!", (WIDTH//2 - 80, HEIGHT//2 - 20), fontsize=60, color="gold")
 
 def update():
-    global px, py
-    if keyboard.right:  px = px + SPEED
-    if keyboard.left:   px = px - SPEED
-    if keyboard.down:   py = py + SPEED
-    if keyboard.up:     py = py - SPEED
-    px = max(15, min(WIDTH - 15, px))
-    py = max(15, min(HEIGHT - 15, py))
+    if keyboard.right:  dog.x += SPEED
+    if keyboard.left:   dog.x -= SPEED
+    if keyboard.down:   dog.y += SPEED
+    if keyboard.up:     dog.y -= SPEED
+    
+    dog.x = max(20, min(WIDTH - 20, dog.x))
+    dog.y = max(20, min(HEIGHT - 20, dog.y))

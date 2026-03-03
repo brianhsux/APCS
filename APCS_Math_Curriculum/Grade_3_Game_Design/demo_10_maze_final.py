@@ -5,6 +5,7 @@
 WIDTH = 420
 HEIGHT = 460
 
+# Theme: Hero in Dungeon
 # Map: 0=Road, 1=Wall
 MAZE = [
     [1, 1, 1, 1, 1, 1, 1],
@@ -17,33 +18,41 @@ MAZE = [
 ]
 ROWS, COLS = 7, 7
 TILE = 58
-# Start & End
+
+# Actors
+hero = Actor('hero')
+chest = Actor('chest')
+wall_img = Actor('wall') # We'll use this to draw walls
+
+# Start & End Indices
 start_r, start_c = 1, 1
 end_r, end_c = 5, 5
-# Player State
+
+# Set initial positions
+hero.pos = (start_c * TILE + TILE//2, start_r * TILE + TILE//2)
+chest.pos = (end_c * TILE + TILE//2, end_r * TILE + TILE//2)
+
+# Logic State
 pr, pc = start_r, start_c
-energy = 30  # Energy, -1 per step
-game_over = None  # None / "win" / "lose"
+energy = 30
+game_over = None
 
 def draw():
     screen.fill("black")
     for r in range(ROWS):
         for c in range(COLS):
-            x, y = c * TILE, r * TILE
+            x = c * TILE + TILE // 2
+            y = r * TILE + TILE // 2
+            
             if MAZE[r][c] == 1:
-                screen.draw.filled_rect(Rect(x, y, TILE - 2, TILE - 2), "gray")
+                wall_img.pos = (x, y)
+                wall_img.draw()
             else:
-                screen.draw.filled_rect(Rect(x, y, TILE - 2, TILE - 2), "darkgreen")
+                # Draw floor (just dark rect)
+                screen.draw.filled_rect(Rect(c*TILE, r*TILE, TILE, TILE), (20, 20, 20))
     
-    # Goal (Treasure)
-    screen.draw.filled_rect(Rect(end_c * TILE + 10, end_r * TILE + 10, 36, 36), "gold")
-    screen.draw.text("*", (end_c * TILE + 22, end_r * TILE + 14), fontsize=28, color="sienna")
-    
-    # Player
-    cx = pc * TILE + TILE // 2
-    cy = pr * TILE + TILE // 2
-    screen.draw.filled_circle((cx, cy), 18, "red")
-    screen.draw.text("Me", (cx - 8, cy - 10), fontsize=16, color="white")
+    chest.draw()
+    hero.draw()
     
     # Info Bar
     dist = abs(pr - end_r) + abs(pc - end_c)
@@ -71,6 +80,10 @@ def on_key_down(key):
         return
         
     pr, pc = nr, nc
+    # Update Graphic Position
+    hero.x = pc * TILE + TILE // 2
+    hero.y = pr * TILE + TILE // 2
+    
     energy -= 1
     
     if pr == end_r and pc == end_c:

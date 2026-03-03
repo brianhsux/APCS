@@ -5,39 +5,42 @@
 WIDTH = 600
 HEIGHT = 400
 
-player_x, player_y = 50, 200
-# Star Bullet (x, y, active)
-star_x = -100
-star_y = -100
-star_active = False
+# Theme: Rocket shooting Meteors
+rocket = Actor('rocket')
+rocket.pos = (50, 200)
+rocket.angle = -90 # Point right
+
+meteor = Actor('meteor')
+meteor.pos = (-100, -100) # Off screen
+meteor_active = False
 SPEED = 8
 
 def draw():
     screen.fill("midnightblue")
-    # Player
-    screen.draw.filled_circle((player_x, player_y), 20, "blue")
-    screen.draw.text("Press SPACE to Shoot", (10, 370), color="white")
     
-    # Star
-    if star_active:
-        screen.draw.filled_star((star_x, star_y), 4, 10, 15, "yellow")
+    rocket.draw()
+    
+    if meteor_active:
+        meteor.draw()
+        
+    screen.draw.text("Press SPACE to Shoot Meteor", (10, 370), color="white")
 
 def update():
-    global player_x, player_y, star_x, star_y, star_active
+    global meteor_active
     
     # Player Movement (Up/Down)
-    if keyboard.up: player_y -= 5
-    if keyboard.down: player_y += 5
+    if keyboard.up: rocket.y -= 5
+    if keyboard.down: rocket.y += 5
     
     # Shooting Logic
-    if keyboard.space and not star_active:
-        star_active = True
-        star_x = player_x + 20
-        star_y = player_y
+    if keyboard.space and not meteor_active:
+        meteor_active = True
+        meteor.pos = rocket.pos
         
-    # Star Flight (Vector: x keeps increasing)
-    if star_active:
-        star_x += SPEED
+    # Meteor Flight (Vector: x keeps increasing)
+    if meteor_active:
+        meteor.x += SPEED
+        meteor.angle += 5 # Spin!
         # Reset if out of screen
-        if star_x > WIDTH:
-            star_active = False
+        if meteor.x > WIDTH:
+            meteor_active = False

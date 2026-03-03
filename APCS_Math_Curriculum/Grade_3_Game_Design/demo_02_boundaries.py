@@ -5,41 +5,44 @@
 WIDTH = 600
 HEIGHT = 400
 
-px, py = 300, 200
+# Theme: Penguin Ice Skating
+player = Actor('penguin')
+player.pos = (300, 200)
 SPEED = 5
-message = "Moving safely..."
+message = "Skating safely..."
 
 def draw():
-    screen.fill("indigo")
+    screen.fill("aliceblue") # Icy color
     # Draw boundary box
-    screen.draw.rect(Rect(50, 50, 500, 300), "white")
+    screen.draw.rect(Rect(50, 50, 500, 300), "blue")
     
-    screen.draw.filled_circle((px, py), 20, "cyan")
-    screen.draw.text(f"({px}, {py})", (px-20, py-40), color="white")
-    screen.draw.text(message, (20, 20), fontsize=24, color="yellow")
+    player.draw()
+    
+    screen.draw.text(f"({int(player.x)}, {int(player.y)})", (player.x-20, player.y-40), color="blue")
+    screen.draw.text(message, (20, 20), fontsize=24, color="darkblue")
 
 def update():
-    global px, py, message
+    global message
     
     # Try to move
-    if keyboard.right: px += SPEED
-    if keyboard.left:  px -= SPEED
-    if keyboard.down:  py += SPEED
-    if keyboard.up:    py -= SPEED
+    if keyboard.right: player.x += SPEED
+    if keyboard.left:  player.x -= SPEED
+    if keyboard.down:  player.y += SPEED
+    if keyboard.up:    player.y -= SPEED
     
     # Boundary Logic
     # 如果 x 小於 50 (太左邊)，就讓 x 停在 50
-    if px < 50:
-        px = 50
-        message = "Hit Left Wall!"  # 撞到左牆
-    elif px > 550:
-        px = 550
-        message = "Hit Right Wall!" # 撞到右牆
-    elif py < 50:
-        py = 50
-        message = "Hit Top Wall!"   # 撞到上牆
-    elif py > 350:
-        py = 350
-        message = "Hit Bottom Wall!" # 撞到下牆
+    if player.x < 50:
+        player.x = 50
+        message = "Hit Left Wall! Ouch!"  # 撞到左牆
+    elif player.x > 550:
+        player.x = 550
+        message = "Hit Right Wall! Ouch!" # 撞到右牆
+    elif player.y < 50:
+        player.y = 50
+        message = "Hit Top Wall! Ouch!"   # 撞到上牆
+    elif player.y > 350:
+        player.y = 350
+        message = "Hit Bottom Wall! Ouch!" # 撞到下牆
     else:
-        message = "Moving safely..."
+        message = "Skating safely..."
